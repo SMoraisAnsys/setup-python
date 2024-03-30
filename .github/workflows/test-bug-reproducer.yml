@@ -1,0 +1,27 @@
+name: Test bug reproducer
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+
+env:
+  MAIN_PYTHON_VERSION: '3.10.10'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  test-bug-reproducer:
+    name: Test reproducing the bug on windows
+    runs-on: windows-latest
+    steps:
+      - name: Setup Python
+        uses: SMoraisAnsys/setup-python@test/no-pwshpath
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
